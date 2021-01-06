@@ -1,11 +1,9 @@
-// вы можете как угодно изменять программу и код
-// добавлять любые переменные и модели
-// ваша задача реализовать так, как показано на видео, чтобы оно работало
-
 const App = {
+
   data() {
     return {
-      activeIndex: 0, // то, что позволяет определить текущий активный шаг
+      isFinish: false,      // флаг, о "запуске заного"
+      activeIndex: 0,       // то, что позволяет определить текущий активный шаг
       steps: [
         {title: 'Основы', text: 'В блоке вы познакомитесь со всеми основами Vue.js на практике. На протяжении блока мы напишем реактивное приложение, в процессе разработки которого разберем вся базу фреймворка.'},
         {title: 'Компоненты', text: 'Один из самых важных блоков в курсе, где вы узнаете все о компонентах. В блоке мы напишем 2 разных приложения и создадим более 5 различных UI компонентов как в реальной разработке. Блок расскажет про абсолютно все составляющие, которые есть в компонентах: взаимодействие, slots, асинхронные и динамические компоненты и тонна примеров.'},
@@ -15,38 +13,33 @@ const App = {
       ]
     }
   },
+
   methods: {
-    prev() {
-      // когда нажимаем кнопку назад
-      this.activeIndex--
+    prev() {                // когда нажимаем кнопку назад
+      if (this.activeIndex > 0) this.activeIndex--
     },
-    reset() {
-      // начать заново
-      this.activeIndex=0
+    reset() {               // начать заново
+      this.activeIndex = 0
+      this.isFinish = false
     },
-    nextOfFinish() {
-      // кнопка вперед или закончить
-      this.activeIndex++
+    nextOfFinish() {        // кнопка вперед или закончить
+      this.activeIndex < this.steps.length-1 ? this.activeIndex++ : this.isFinish = true
     },
-    setActive(idx) {
-      // когда нажимаем на определенный шаг
-      this.activeIndex=idx
+    setActive(idx) {        // когда нажимаем на определенный шаг
+      if (!this.isFinish) this.activeIndex = idx
     }
   },
+
   computed: {
-    // тут стоит определить несколько свойств:
-    // 1. текущий выбранный шаг
-    activeStep() {
-      return this.activeIndex>this.steps.length-1?this.steps.length-1:this.activeIndex
+    activeStep(){
+      return this.steps[this.activeIndex]
     },
-    // 2. выключена ли кнопка назад
-    prevBntDisable() {
-      return this.activeStep>0?false:true
+    prevBtnDisable() {      // выключена ли кнопка назад
+      return this.activeIndex === 0
     },
-    // 3. находимся ли мы на последнем шаге
-    isStepLast() {
-      return this.activeStep<this.steps.length-1?false:true
-    }
+    isStepLast() {          // находимся ли мы на последнем шаге
+      return this.activeIndex === this.steps.length-1
+    }    
   }
 }
 
